@@ -115,7 +115,7 @@ MIT. See the `LICENSE` file for details.
 
 ---
 
-**Created by Abhin Vaidya**
+**Created by Abhinav Vaidya**
 
 
 
