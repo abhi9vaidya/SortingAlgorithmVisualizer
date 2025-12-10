@@ -30,6 +30,7 @@ export const SortingVisualizer = () => {
   const [customInput, setCustomInput] = useState('');
   const [inputError, setInputError] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [caseType, setCaseType] = useState<'random' | 'sorted' | 'reversed'>('random');
   
   const engineRef = useRef(new SortingEngine());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -243,6 +244,63 @@ export const SortingVisualizer = () => {
 
         {/* Input Mode Toggle & Controls */}
         <section className="glass-panel p-4 sm:p-6 space-y-5">
+          {/* Case Type Selector */}
+          <div className="flex items-center justify-center gap-1 p-1 bg-muted/50 rounded-lg w-fit mx-auto flex-wrap">
+            <button
+              onClick={() => {
+                setCaseType('random');
+                setIsPlaying(false);
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                const newArray = engineRef.current.generateArray(arraySize);
+                setArray(newArray);
+                setSteps([]);
+                setCurrentStep(0);
+              }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-all ${
+                caseType === 'random' 
+                  ? 'bg-background text-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              🎲 Random
+            </button>
+            <button
+              onClick={() => {
+                setCaseType('sorted');
+                setIsPlaying(false);
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                const newArray = engineRef.current.generateSortedArray(arraySize);
+                setArray(newArray);
+                setSteps([]);
+                setCurrentStep(0);
+              }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-all ${
+                caseType === 'sorted' 
+                  ? 'bg-background text-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              ✅ Best Case
+            </button>
+            <button
+              onClick={() => {
+                setCaseType('reversed');
+                setIsPlaying(false);
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                const newArray = engineRef.current.generateReverseSortedArray(arraySize);
+                setArray(newArray);
+                setSteps([]);
+                setCurrentStep(0);
+              }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-all ${
+                caseType === 'reversed' 
+                  ? 'bg-background text-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              ⚠️ Worst Case
+            </button>
+          </div>
           {/* Input Mode Tabs */}
           <div className="flex items-center justify-center gap-1 p-1 bg-muted/50 rounded-lg w-fit mx-auto">
             <button
@@ -413,6 +471,18 @@ export const SortingVisualizer = () => {
                   <span>/</span>
                   <span>{steps.length}</span>
                   <span className="text-muted-foreground">steps</span>
+                </div>
+              )}
+              {steps.length > 0 && currentData.comparisons !== undefined && (
+                <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground font-mono">
+                  <div className="bg-muted/50 px-3 py-1 rounded-md">
+                    <span className="text-secondary font-semibold">{currentData.comparisons}</span>
+                    <span> comparisons</span>
+                  </div>
+                  <div className="bg-muted/50 px-3 py-1 rounded-md">
+                    <span className="text-accent font-semibold">{currentData.swaps}</span>
+                    <span> swaps</span>
+                  </div>
                 </div>
               )}
             </div>

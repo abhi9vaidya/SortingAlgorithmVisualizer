@@ -3,9 +3,21 @@ import { SortingStep, SortingAlgorithm } from './sortingTypes';
 export class SortingEngine {
   private steps: SortingStep[] = [];
   private originalArray: number[] = [];
+  private comparisonCount: number = 0;
+  private swapCount: number = 0;
 
   generateArray(size: number = 15): number[] {
     this.originalArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 5);
+    return [...this.originalArray];
+  }
+
+  generateSortedArray(size: number = 15): number[] {
+    this.originalArray = Array.from({ length: size }, (_, i) => (i + 1) * 5);
+    return [...this.originalArray];
+  }
+
+  generateReverseSortedArray(size: number = 15): number[] {
+    this.originalArray = Array.from({ length: size }, (_, i) => (size - i) * 5);
     return [...this.originalArray];
   }
 
@@ -15,6 +27,8 @@ export class SortingEngine {
 
   getSteps(algorithm: SortingAlgorithm): SortingStep[] {
     this.steps = [];
+    this.comparisonCount = 0;
+    this.swapCount = 0;
     const arr = [...this.originalArray];
 
     switch (algorithm) {
@@ -41,12 +55,17 @@ export class SortingEngine {
   }
 
   private addStep(array: number[], comparing: number[], swapping: number[], sorted: number[], description: string): void {
+    if (comparing.length > 0) this.comparisonCount++;
+    if (swapping.length > 0) this.swapCount++;
+    
     this.steps.push({
       array: [...array],
       comparing: [...comparing],
       swapping: [...swapping],
       sorted: [...sorted],
-      description
+      description,
+      comparisons: this.comparisonCount,
+      swaps: this.swapCount
     });
   }
 

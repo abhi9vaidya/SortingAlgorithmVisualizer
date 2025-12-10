@@ -4,6 +4,8 @@ export interface SortingStep {
   swapping: number[];
   sorted: number[];
   description: string;
+  comparisons?: number;
+  swaps?: number;
 }
 
 export interface SortingState {
