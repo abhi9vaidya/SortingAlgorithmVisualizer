@@ -166,7 +166,7 @@ export const SortingVisualizer = () => {
     };
   }, [isPlaying, steps.length, speed]);
 
-  const currentData = steps[currentStep] || { array, comparing: [], swapping: [], sorted: [], description: 'Press Play to start visualization' };
+  const currentData = steps[currentStep] || { array, comparing: [], swapping: [], sorted: [], description: 'Press Play to start visualization', comparisons: 0, swaps: 0 };
   const maxValue = Math.max(...currentData.array, 1);
   const isComplete = currentStep >= steps.length - 1 && steps.length > 0;
 
