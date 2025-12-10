@@ -271,71 +271,75 @@ export const SortingVisualizer = () => {
 
           {/* Input Section */}
           {inputMode === 'random' ? (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-              <div className="flex items-center gap-3">
-                <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Size</label>
-                <input
-                  type="range"
-                  min="5"
-                  max="50"
-                  value={arraySize}
-                  onChange={(e) => setArraySize(Number(e.target.value))}
-                  className="w-24 sm:w-32 accent-primary h-2 rounded-full cursor-pointer"
-                />
-                <span className="text-sm font-mono text-foreground bg-muted px-2.5 py-1 rounded-md min-w-[40px] text-center">{arraySize}</span>
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Size</label>
+                  <input
+                    type="range"
+                    min="5"
+                    max="50"
+                    value={arraySize}
+                    onChange={(e) => setArraySize(Number(e.target.value))}
+                    className="flex-1 sm:w-24 md:w-32 accent-primary h-2 rounded-full cursor-pointer"
+                  />
+                  <span className="text-sm font-mono text-foreground bg-muted px-2.5 py-1 rounded-md min-w-[40px] text-center">{arraySize}</span>
+                </div>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Speed</label>
+                  <input
+                    type="range"
+                    min="20"
+                    max="400"
+                    step="20"
+                    value={700 - speed}
+                    onChange={(e) => setSpeed(700 - Number(e.target.value))}
+                    className="flex-1 sm:w-24 md:w-32 accent-primary h-2 rounded-full cursor-pointer"
+                  />
+                  <span className="text-xs font-medium text-muted-foreground min-w-[50px]">
+                    {speed < 200 ? '🚀 Fast' : speed < 400 ? '⚡ Medium' : '🐢 Slow'}
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">Speed</label>
-                <input
-                  type="range"
-                  min="20"
-                  max="400"
-                  step="20"
-                  value={700 - speed}
-                  onChange={(e) => setSpeed(700 - Number(e.target.value))}
-                  className="w-24 sm:w-32 accent-primary h-2 rounded-full cursor-pointer"
-                />
-                <span className="text-xs font-medium text-muted-foreground min-w-[50px]">
-                  {speed < 200 ? '🚀 Fast' : speed < 400 ? '⚡ Medium' : '🐢 Slow'}
-                </span>
-              </div>
-
-              <Button onClick={generateNewArray} variant="outline" className="gap-2">
+              <Button onClick={generateNewArray} variant="outline" className="gap-2 w-full sm:w-auto">
                 <Shuffle className="w-4 h-4" />
                 Generate
               </Button>
             </div>
           ) : (
             <div className="max-w-xl mx-auto space-y-3">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1">
-                  <Input
-                    type="text"
-                    placeholder="Enter numbers (e.g., 64, 34, 25, 12, 22, 11, 90)"
-                    value={customInput}
-                    onChange={(e) => {
-                      setCustomInput(e.target.value);
-                      setInputError('');
-                    }}
-                    onKeyDown={(e) => e.key === 'Enter' && parseCustomInput()}
-                    className="w-full font-mono text-sm"
-                  />
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      placeholder="Enter numbers (e.g., 64, 34, 25)"
+                      value={customInput}
+                      onChange={(e) => {
+                        setCustomInput(e.target.value);
+                        setInputError('');
+                      }}
+                      onKeyDown={(e) => e.key === 'Enter' && parseCustomInput()}
+                      className="w-full font-mono text-sm"
+                    />
+                  </div>
+                  <Button onClick={parseCustomInput} className="gap-2 w-full sm:w-auto shrink-0">
+                    <Play className="w-4 h-4" />
+                    Apply
+                  </Button>
                 </div>
-                <Button onClick={parseCustomInput} className="gap-2 shrink-0">
-                  <Play className="w-4 h-4" />
-                  Apply
-                </Button>
+                {inputError && (
+                  <p className="text-sm text-destructive text-center">{inputError}</p>
+                )}
               </div>
-              {inputError && (
-                <p className="text-sm text-destructive text-center">{inputError}</p>
-              )}
               <p className="text-xs text-muted-foreground text-center">
-                Enter comma or space-separated numbers between 1-100 (max 50 numbers)
+                Enter comma or space-separated numbers between 1-100 (max 50)
               </p>
               
               {/* Speed control for custom mode */}
-              <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                 <label className="text-sm font-medium text-muted-foreground">Speed</label>
                 <input
                   type="range"
@@ -344,9 +348,9 @@ export const SortingVisualizer = () => {
                   step="20"
                   value={700 - speed}
                   onChange={(e) => setSpeed(700 - Number(e.target.value))}
-                  className="w-32 accent-primary h-2 rounded-full cursor-pointer"
+                  className="w-full sm:w-32 accent-primary h-2 rounded-full cursor-pointer"
                 />
-                <span className="text-xs font-medium text-muted-foreground">
+                <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
                   {speed < 200 ? '🚀 Fast' : speed < 400 ? '⚡ Medium' : '🐢 Slow'}
                 </span>
               </div>
@@ -354,11 +358,11 @@ export const SortingVisualizer = () => {
           )}
 
           {/* Playback Controls */}
-          <div className="flex items-center justify-center gap-2 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
             <Button
               onClick={togglePlay}
               size="lg"
-              className="gap-2 min-w-[130px] shadow-lg shadow-primary/20"
+              className="gap-2 w-full sm:w-auto sm:min-w-[130px] shadow-lg shadow-primary/20"
               disabled={isComplete || array.length === 0}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -369,7 +373,7 @@ export const SortingVisualizer = () => {
               onClick={stepForward}
               variant="outline"
               size="lg"
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto"
               disabled={isComplete || array.length === 0}
             >
               <SkipForward className="w-4 h-4" />
@@ -380,7 +384,7 @@ export const SortingVisualizer = () => {
               onClick={reset}
               variant="outline"
               size="lg"
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto"
               disabled={steps.length === 0}
             >
               <RotateCcw className="w-4 h-4" />
@@ -414,7 +418,7 @@ export const SortingVisualizer = () => {
             </div>
 
             {/* Bars */}
-            <div className="flex items-end justify-center gap-[3px] sm:gap-1 h-64 sm:h-80 md:h-96 pt-6">
+            <div className="flex items-end justify-center gap-[2px] sm:gap-[3px] lg:gap-1 h-48 sm:h-64 md:h-80 lg:h-96 pt-6">
               {currentData.array.map((value, idx) => {
                 const isComparing = currentData.comparing.includes(idx);
                 const isSwapping = currentData.swapping.includes(idx);
@@ -426,13 +430,13 @@ export const SortingVisualizer = () => {
                   <div
                     key={idx}
                     className="relative flex-1 h-full flex flex-col justify-end items-center group"
-                    style={{ maxWidth: barCount > 30 ? '16px' : barCount > 20 ? '24px' : '40px' }}
+                    style={{ maxWidth: barCount > 30 ? '12px' : barCount > 20 ? '16px' : '32px' }}
                   >
                     {/* Value label */}
                     <span className={`
-                      mb-1 font-mono font-semibold transition-all duration-150
+                      mb-0.5 font-mono font-semibold transition-all duration-150 leading-none
                       ${isSwapping ? 'text-accent scale-110' : isComparing ? 'text-secondary' : 'text-muted-foreground'}
-                      ${barCount > 35 ? 'text-[8px]' : barCount > 25 ? 'text-[10px]' : 'text-xs'}
+                      ${barCount > 35 ? 'text-[6px] sm:text-[8px]' : barCount > 25 ? 'text-[8px] sm:text-[10px]' : 'text-[9px] sm:text-xs'}
                     `}>
                       {value}
                     </span>
