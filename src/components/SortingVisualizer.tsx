@@ -5,7 +5,7 @@ import { algorithmDetails } from '@/core/algorithmInfo';
 import { AlgorithmDetails } from '@/components/AlgorithmDetails';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Play, Pause, RotateCcw, SkipForward, Shuffle, ChevronDown, Zap, Keyboard, Sliders } from 'lucide-react';
+import { Play, Pause, RotateCcw, SkipForward, Shuffle, ChevronDown, Zap, Keyboard, Sliders, Moon, Sun } from 'lucide-react';
 
 const ALGORITHMS: { value: SortingAlgorithm; label: string; icon: string }[] = [
   { value: 'bubble', label: 'Bubble Sort', icon: '🫧' },
@@ -29,6 +29,7 @@ export const SortingVisualizer = () => {
   const [inputMode, setInputMode] = useState<'random' | 'custom'>('random');
   const [customInput, setCustomInput] = useState('');
   const [inputError, setInputError] = useState('');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   
   const engineRef = useRef(new SortingEngine());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -88,6 +89,30 @@ export const SortingVisualizer = () => {
   useEffect(() => {
     generateNewArray();
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = window.localStorage.getItem('theme');
+    if (stored === 'dark' || stored === 'light') {
+      setTheme(stored);
+      return;
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(prefersDark ? 'dark' : 'light');
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+
+    window.localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const startSorting = () => {
     engineRef.current.setArray(array);
@@ -150,6 +175,23 @@ export const SortingVisualizer = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Header */}
       <header className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-card to-background">
+        <div className="absolute top-4 right-4 md:top-6 md:right-8 z-10">
+          <button
+            type="button"
+            onClick={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground shadow-sm shadow-primary/20 transition hover:border-primary/80 hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-4 w-4 text-foreground" />
+            ) : (
+              <Moon className="h-4 w-4 text-foreground" />
+            )}
+            <span className="hidden sm:inline text-[0.65rem]">
+              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            </span>
+          </button>
+        </div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_60%)]" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23888%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
         
