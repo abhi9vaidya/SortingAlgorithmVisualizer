@@ -25,7 +25,7 @@
 | --- | --- |
 | ![Intro screen](public/intro.png) | ![Sorting in action](public/visualization.png) |
 
-> Live preview: https://sortingalgorithmvisualizer.vercel.app
+> Live preview: https://sortingalgovisualizerv1.vercel.app
 
 ---
 
@@ -57,7 +57,7 @@
 
 ## 🌐 Live Demo
 
-[https://sortingalgorithmvisualizer.vercel.app](https://sortingalgorithmvisualizer.vercel.app)
+[https://sortingalgovisualizerv1.vercel.app](https://sortingalgovisualizerv1.vercel.app)
 
 ---
 
